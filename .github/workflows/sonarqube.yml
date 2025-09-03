@@ -2,20 +2,19 @@ name: SonarQube Scan
 
 on:
   workflow_run:
-    workflows: ["Unit Test"]   # hanya jalan setelah workflow Test selesai
+    workflows: ["Unit Test"]
     types:
       - completed
 
 jobs:
   sonarqube:
-    name: SonarQube Scan
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
@@ -24,10 +23,6 @@ jobs:
 
       - name: SonarQube Scan
         uses: sonarsource/sonarcloud-github-action@v2
-        with:
-          projectBaseDir: .
-        args: >
-          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
