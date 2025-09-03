@@ -1,0 +1,29 @@
+name: k6 Smoke Test
+
+on:
+  workflow_run:
+    workflows: ["Unit Test"]   # jalan setelah Unit Test selesai
+    types:
+      - completed
+
+jobs:
+  k6-smoke-test:
+    name: k6 Smoke Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Install k6
+        run: |
+          sudo apt update && sudo apt install -y k6
+
+      - name: Run k6 Smoke Test
+        run: |
+          k6 run tests/k6/smoke-test.js --out json=smoke-result.json
+
+      - name: Upload k6 Result
+        uses: actions/upload-artifact@v3
+        with:
+          name: k6-result
+          path: smoke-result.json
