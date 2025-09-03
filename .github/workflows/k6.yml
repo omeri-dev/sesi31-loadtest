@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install k6
         run: |
@@ -23,7 +23,8 @@ jobs:
           k6 run tests/k6/smoke-test.js --out json=smoke-result.json
 
       - name: Upload k6 Result
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: k6-result
           path: smoke-result.json
+
