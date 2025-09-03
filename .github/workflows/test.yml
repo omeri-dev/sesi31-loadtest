@@ -1,0 +1,32 @@
+name: Unit Test
+
+on:
+  workflow_run:
+    workflows: ["Lint"]   # hanya jalan setelah workflow Lint selesai
+    types:
+      - completed
+
+jobs:
+  test:
+    name: Unit Test & Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Jest Tests
+        run: npm test -- --coverage
+
+      - name: Upload Coverage Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage/
