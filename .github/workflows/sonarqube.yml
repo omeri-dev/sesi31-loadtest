@@ -26,7 +26,8 @@ jobs:
         uses: sonarsource/sonarcloud-github-action@v2
         with:
           projectBaseDir: .
-          extraProperties: |
-            sonar.host.url=${{ secrets.SONAR_HOST_URL }}
-            sonar.login=${{ secrets.SONAR_TOKEN }}
-            sonar.javascript.lcov.reportPaths=coverage/lcov.info
+        args: >
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+
